@@ -183,3 +183,6 @@ if __name__ == "__main__":
                 test_correct += predicted.eq(labels).sum().item()
         print(f"Test Accuracy: {100. * test_correct / test_total:.2f}%")
         print("-" * 30)
+
+
+    # don't use  cifar 10 its 32 * 32 , and google net is for high res images like 227 * 227
