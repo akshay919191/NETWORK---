@@ -52,4 +52,4 @@ class MultiHeadAttention(nn.Module):
         x = x.transpose(1 , 2).contiguous().view(x.shape[0] , -1 , self.num_head * self.d_k)
 
         # (batch , seq_len , d_model) --> (batch , seq_len , d_model)
-        return self.w_o(x)
+        return self.w_o(x), attn_score
