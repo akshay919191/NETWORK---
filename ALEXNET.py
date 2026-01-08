@@ -5,36 +5,30 @@ import torchvision
 from torchvision.transforms import transforms
 
 class AlexNET(nn.Module):
-    def __init__(self , inchannel , height , width):
+    def __init__(self , inchannel ):
         super().__init__()
         self.feature = nn.Sequential(
-            # ( inchannel , height , width) -> ( 96 , height // 4 , width // 4)
+            
             nn.Conv2d(inchannel , 64 , kernel_size = 3 , stride = 1 , padding = 1) ,
             nn.ReLU(inplace=True),
-
-            # ( 96 , height // 4 , width // 4) -> ( 64 , height // 8 , width // 8)
             nn.MaxPool2d(2 , stride = 2) ,
-
             nn.BatchNorm2d(64) ,
 
-            # ( 96 , height // 8 , width // 8) -> ( 128 , height // 8 , width // 8)
+         
             nn.Conv2d(64 , 128 , kernel_size = 3 , padding = 2) ,
             nn.ReLU(inplace=True),
-
-            # ( 128 , height // 8 , width // 8) -> ( 128 , height // 16 , width // 16)
             nn.MaxPool2d(2 , stride = 2) ,
-
             nn.BatchNorm2d(128) ,
 
-            # ( 128 , height // 16 , width // 16) -> ( 192 , height // 16 , width // 16)
+            
             nn.Conv2d(128 , 192 , kernel_size = 2 , stride = 2 ) ,
             nn.ReLU(inplace=True),
 
-            # ( 192 , height // 16 , width // 16) -> ( 192 , height // 16 , width // 16)
+           
             nn.Conv2d(192 , 192 , kernel_size = 3 , padding = 1) ,
             nn.ReLU(inplace=True),
 
-            # ( 192 , height // 16 , width // 16) -> ( 256 , height // 32 , width // 32)
+            
             nn.Conv2d(192 , 256 , kernel_size = 3 , padding = 1) ,
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2),
@@ -42,7 +36,7 @@ class AlexNET(nn.Module):
         )
 
         with torch.no_grad():
-            dummy = torch.randn(1 , 3 , 32 , 32)
+            dummy = torch.randn(1 , 3 , 32 , 32) # as size was too small for cifar i have to make particular for it , you can change accordingly
             output = self.feature(dummy)
 
             self.flat_size = output.numel() // output.shape[0]
