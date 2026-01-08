@@ -14,7 +14,7 @@ class basicMODULE(nn.Module):
         self.b2 = nn.BatchNorm2d(outchannel)
 
         self.shortcut = nn.Sequential()
-        if inchannel != outchannel:
+        if stride != 1 or inchannel != outchannel:
             self.shortcut = nn.Sequential(nn.Conv2d(inchannel , outchannel , kernel_size = 1 , stride = stride),
                                           nn.BatchNorm2d(outchannel)
                                           )
@@ -57,7 +57,7 @@ class ResNET(nn.Module):
         self.pool = nn.AdaptiveAvgPool2d((1 , 1))
         self.fc = nn.Linear(512*1 , numclass)
 
-    def make_layer(self , inchannel , outchannel , stride , numchannel):
+    def make_layer(self , inchannel , outchannel , numchannel , stride = 1):
         layer = []
 
         layer.append(basicMODULE(inchannel , outchannel, stride))
@@ -85,7 +85,7 @@ class ResNET(nn.Module):
         out = self.layer9(out)
 
         out = self.pool(out)
-        out = nn.Flatten()
+        out = torch.flatten(out, 1)
         out = self.fc(out)
 
         return out
