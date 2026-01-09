@@ -42,7 +42,7 @@ class SimpleCNN(nn.Module):
                 nn.Dropout(0.4),
                 nn.Linear(512, 10)
             ).to(x.device)
-            print(f"Created classifier for flattened size: {self.flattened_size}")
+            
         
         x = self.classifier(x)
         return x
